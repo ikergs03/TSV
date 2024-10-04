@@ -26,6 +26,12 @@ def reduce(imagen):
     #        Por ejemplo, si la imagen es 5x7, la salida sera 3x4  
     """   
     output = np.empty(shape=[0,0]) # iniciamos la variable de salida (numpy array)
+    
+    kernel = generar_kernel_suavizado(0.4) 
+    
+    imagen_suavizada = scipy.signal.convolve2d(imagen, kernel, mode='same') 
+    
+    output = imagen_suavizada[::2, ::2]
 
     #...
    
@@ -40,8 +46,23 @@ def expand(imagen):
     #     
     # Devuelve:
     #    output: numpy array de tamaño [imagen_height*2, imagen_width*2].
-    """ 
+    """
+    
     output = np.empty(shape=[0,0]) # iniciamos la variable de salida (numpy array)
+    
+    # 1. Crear una imagen expandida de tamaño doble
+    filas, columnas = imagen.shape
+    imagen_expandida = np.zeros((filas * 2, columnas * 2))
+    
+    # 2. Copiar la imagen original en las posiciones pares
+    imagen_expandida[::2, ::2] = imagen
+    
+    kernel = generar_kernel_suavizado(0.4) 
+    
+    imagen_suavizada  = scipy.signal.convolve2d(imagen, kernel, mode='same') 
+    
+    # 5. Multiplicar el resultado por 4
+    output = imagen_suavizada * 4
 
     #...
 
