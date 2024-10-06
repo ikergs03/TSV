@@ -63,8 +63,6 @@ pyparsing==3.1.4
 pyrsistent==0.18.0
 python-dateutil==2.9.0.post0
 PyWavelets==1.1.1
-pywin32==305
-pywinpty==1.1.6
 pyzmq==25.1.2
 qtconsole==5.2.2
 QtPy==2.0.1
