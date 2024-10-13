@@ -24,10 +24,24 @@ def gaus_piramide(imagen, niveles):
     #       output[0] es la imagen de entrada
     #       output[i] es el nivel i de la piramide
     #  
-    """ 
-    gaus_pyr = []  # iniciamos la variable de salida (lista)
+    """
 
-    #...
+    # Función gaus_piramide(imagen,niveles)
+    # Recibe una imagen y genera una pirámide
+    # El primer nivel de la pirámide es la imagen original.
+    # Cada nuevo nivel se obtiene aplicando reduce sobre el nivel anterior:
+    # Crear un kernel de suavizado con a = 0.4
+    # Convolucionar la imagen con este kernel utilizando la función 'convolucion2d' de la tarea 1
+    # Muestrear por 2 el resultado de la convolución (i.e. coger una de cada dos muestras en ambas direcciones empezando por la primera posición del array)
+
+    # implementacion a continuacion
+
+    gaus_pyr = [imagen]
+
+    # Aplicamos la operación de reducción 'niveles' veces
+    for i in range(niveles):
+        imagen_reducida = reduce(gaus_pyr[-1])
+        gaus_pyr.append(imagen_reducida)
 
     return gaus_pyr
 
@@ -54,8 +68,28 @@ def lapl_piramide(gaus_pyr):
     #   columna para obtener una imagen de tamaño 5x7 donde pueda aplicar la resta      
     """ 
     lapl_pyr = [] # iniciamos la variable de salida (lista) 
+    niveles = len(gaus_pyr) - 1  # el número de niveles es el tamaño de la pirámide Gaussiana menos 1
 
-    #...
+    # Para cada nivel excepto el último, calculamos la diferencia
+    for i in range(niveles):
+        # Expandimos el nivel k+1 de la pirámide Gaussiana
+        imagen_expandida = expand(gaus_pyr[i + 1])
+
+        # Verificamos si el tamaño de la imagen expandida es mayor que el tamaño de la imagen del nivel k
+        filas_k, columnas_k = gaus_pyr[i].shape
+        filas_exp, columnas_exp = imagen_expandida.shape
+
+        # Si es más grande, ajustamos el tamaño de la imagen expandida
+        if filas_exp > filas_k:
+            imagen_expandida = imagen_expandida[:filas_k, :]
+        if columnas_exp > columnas_k:
+            imagen_expandida = imagen_expandida[:, :columnas_k]
+
+        # Restamos la imagen expandida del nivel k de la pirámide Gaussiana
+        lapl_pyr.append(gaus_pyr[i] - imagen_expandida)
+
+    # El último nivel de la pirámide Laplaciana es el mismo que el último de la pirámide Gaussiana
+    lapl_pyr.append(gaus_pyr[-1])
 
     return lapl_pyr
    
