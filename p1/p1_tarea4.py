@@ -11,9 +11,11 @@ import math
 
 from p1_tests import test_p1_tarea4
 from p1_utils import visualizar_fusion
-import p1_tarea1
-import p1_tarea2
-import p1_tarea3
+from p1_tarea1 import reduce, expand
+from p1_tarea2 import gaus_piramide, lapl_piramide
+from p1_tarea3 import fusionar_lapl_pyr, reconstruir_lapl_pyr
+
+
 
 def run_fusion(imgA, imgB, mask, niveles): 
     """ 
@@ -52,12 +54,46 @@ def run_fusion(imgA, imgB, mask, niveles):
     Lpyr_fus = []       # Pirámide Laplaciana fusionada
     Lpyr_fus_rec = []   # Imagen reconstruida de la pirámide Laplaciana fusionada
 
-    #...
+    #Verificar que las imágenes son matrices bidimensionales
+    if len(imgA.shape) != 2 or len(imgB.shape) != 2 or len(mask.shape) != 2:
+        raise ValueError("Las imágenes deben ser matrices bidimensionales.")
+
+
+    # 1. Convertir las imágenes y la máscara a tipo float, normalizándolas en el rango [0,1]
+    imgA = imgA.astype(np.float64)
+    imgB = imgB.astype(np.float64)
+    mask = mask.astype(np.float64)
+
+    #Normalizar todas las imágenes/máscara tipo float en el rango [0,1]
+
+    imgA = np.clip(imgA, 0, 1)
+    imgB = np.clip(imgB, 0, 1)
+    mask = np.clip(mask, 0, 1)
+
+
+    # 2. Calcular las pirámides Gaussianas de las imágenes y la máscara
+    Gpyr_imgA = gaus_piramide(imgA, niveles)
+    Gpyr_imgB = gaus_piramide(imgB, niveles)
+    Gpyr_mask = gaus_piramide(mask, niveles)
+
+    # 3. Calcular las pirámides Laplacianas de las imágenes
+    Lpyr_imgA = lapl_piramide(Gpyr_imgA)
+    Lpyr_imgB = lapl_piramide(Gpyr_imgB)
+
+    # 4. Fusionar las pirámides Laplacianas utilizando la pirámide Gaussiana de la máscara
+    Lpyr_fus = fusionar_lapl_pyr(Lpyr_imgA, Lpyr_imgB, Gpyr_mask)
+
+    # 5. Reconstruir la imagen fusionada a partir de la pirámide Laplaciana fusionada
+    Lpyr_fus_rec = reconstruir_lapl_pyr(Lpyr_fus)
+
+    # 6. Recortar los valores fuera del rango [0, 1]
+    Lpyr_fus_rec = np.clip(Lpyr_fus_rec, 0, 1)
     
     return Gpyr_imgA, Gpyr_imgB, Gpyr_mask, Lpyr_imgA, Lpyr_imgB, Lpyr_fus, Lpyr_fus_rec
 if __name__ == "__main__":    
     
-    path_imagenes = "./p1_sol/img/"
+    path_imagenes = "C:/Users/2alex/PycharmProjects/TSV/p1/img/"
+
     print("Practica 1 - Tarea 4 - Test autoevaluación\n")    
     result,imgAgray,imgBgray,maskgray,\
         Gpyr_imgA, Gpyr_imgB, Gpyr_mask, Lpyr_imgA, Lpyr_imgB, Lpyr_fus, Lpyr_fus_rec \

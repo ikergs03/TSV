@@ -30,10 +30,20 @@ def fusionar_lapl_pyr(lapl_pyr_imgA, lapl_pyr_imgB, gaus_pyr_mask):
     #       lista de numpy arrays con variable tamaño con "niveles+1" elementos.    
     #       fusion_pyr[i] es el nivel i de la piramide que contiene bordes
     #       fusion_pyr[niveles] es una imagen (RGB o escala de grises)
-    """ 
+    """
+    # Verificación de que las pirámides tienen el mismo número de niveles
+    if len(lapl_pyr_imgA) != len(lapl_pyr_imgB) or len(lapl_pyr_imgA) != len(gaus_pyr_mask):
+        raise ValueError("Las pirámides deben tener el mismo número de niveles.")
+
     fusion_pyr = [] # iniciamos la variable
 
-    #...
+    # Fusionar nivel por nivel
+    for i in range(len(lapl_pyr_imgA)):
+        fusion_nivel = gaus_pyr_mask[i] * lapl_pyr_imgA[i] + (1 - gaus_pyr_mask[i]) * lapl_pyr_imgB[i]
+        fusion_pyr.append(fusion_nivel)
+
+    return fusion_pyr
+
     
     return fusion_pyr
 
@@ -55,11 +65,24 @@ def reconstruir_lapl_pyr(lapl_pyr):
     #   Por ejemplo, si el nivel tiene tamaño 5x7, tras aplicar 'reduce' y 'expand' 
     #   obtendremos una imagen de tamaño 6x8. En este caso, elimine la 6 fila y 8 
     #   columna para obtener una imagen de tamaño 5x7 donde pueda aplicar la resta
-    """ 
+    """
     output = np.empty(shape=[0,0]) # iniciamos la variable de salida (numpy array)
 
+    output = lapl_pyr[-1]  # Empezamos con el último nivel (el más pequeño)
+    # Iterar desde el penúltimo nivel hacia el primer nivel
+    for i in range(len(lapl_pyr) - 2, -1, -1):
+        # Expandir el nivel actual y ajustarlo si el tamaño no coincide
+        expanded = expand(output)
+        if expanded.shape != lapl_pyr[i].shape:
+            expanded = expanded[:lapl_pyr[i].shape[0], :lapl_pyr[i].shape[1]]
+
+        # Sumar la imagen expandida al nivel actual de la pirámide
+        output = expanded + lapl_pyr[i]
+
+    return output
+
     #...
-    
+
     return output
 
 if __name__ == "__main__":    

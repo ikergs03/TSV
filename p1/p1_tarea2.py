@@ -25,25 +25,14 @@ def gaus_piramide(imagen, niveles):
     #       output[i] es el nivel i de la piramide
     #  
     """
+    piramide = [imagen]
 
-    # Función gaus_piramide(imagen,niveles)
-    # Recibe una imagen y genera una pirámide
-    # El primer nivel de la pirámide es la imagen original.
-    # Cada nuevo nivel se obtiene aplicando reduce sobre el nivel anterior:
-    # Crear un kernel de suavizado con a = 0.4
-    # Convolucionar la imagen con este kernel utilizando la función 'convolucion2d' de la tarea 1
-    # Muestrear por 2 el resultado de la convolución (i.e. coger una de cada dos muestras en ambas direcciones empezando por la primera posición del array)
-
-    # implementacion a continuacion
-
-    gaus_pyr = [imagen]
-
-    # Aplicamos la operación de reducción 'niveles' veces
+    # Generar los niveles de la pirámide
     for i in range(niveles):
-        imagen_reducida = reduce(gaus_pyr[-1])
-        gaus_pyr.append(imagen_reducida)
+        nivel = reduce(piramide[-1])  # Aplicar la función 'reduce' a la imagen actual
+        piramide.append(nivel)
 
-    return gaus_pyr
+    return piramide
 
 def lapl_piramide(gaus_pyr):
     """ 
