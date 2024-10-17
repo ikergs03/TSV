@@ -28,8 +28,8 @@ def experimentar_fusion(path_imagenes, niveles_explorados):
 
         # Visualizar pirámides Gaussianas y Laplacianas si es necesario
         Gpyr_imgA, Gpyr_imgB, Gpyr_mask, Lpyr_imgA, Lpyr_imgB, Lpyr_fus, _ = run_fusion(imgA[:, :, 0], imgB[:, :, 0], mask[:, :, 0], niveles)
-        visualizar_gaus_piramide(Gpyr_imgA)  # Sin el argumento 'titulo'
-        visualizar_lapl_piramide(Lpyr_fus)   # Sin el argumento 'titulo'
+        visualizar_gaus_piramide(Gpyr_imgA)  
+        visualizar_lapl_piramide(Lpyr_fus)  
 
 # Ejemplo de uso
 if __name__ == "__main__":
