@@ -2,9 +2,9 @@
 # Practica 1: Fusion de imagenes mediante piramides
 # Tarea 3: fusion de piramides y reconstruccion
 
-# AUTOR1: APELLIDO1 APELLIDO1, NOMBRE1
-# AUTOR2: APELLIDO2 APELLIDO2, NOMBRE2
-# PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# PAREJA/TURNO: 01/VIERNES
 
 import numpy as np
 from p1_tests import test_p1_tarea3
