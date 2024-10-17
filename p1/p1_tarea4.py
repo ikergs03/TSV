@@ -2,9 +2,9 @@
 # Practica 1: Fusion de imagenes mediante piramides
 # Tarea 4: fusion de imagenes
 
-# AUTOR1: APELLIDO1 APELLIDO1, NOMBRE1
-# AUTOR2: APELLIDO2 APELLIDO2, NOMBRE2
-# PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# PAREJA/TURNO: 01/VIERNES
 
 import numpy as np
 import math
@@ -92,7 +92,7 @@ def run_fusion(imgA, imgB, mask, niveles):
     return Gpyr_imgA, Gpyr_imgB, Gpyr_mask, Lpyr_imgA, Lpyr_imgB, Lpyr_fus, Lpyr_fus_rec
 if __name__ == "__main__":    
     
-    path_imagenes = "C:/Users/2alex/PycharmProjects/TSV/p1/img/"
+    path_imagenes = "./p1/img/"
 
     print("Practica 1 - Tarea 4 - Test autoevaluación\n")    
     result,imgAgray,imgBgray,maskgray,\
