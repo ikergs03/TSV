@@ -7,73 +7,71 @@
 # PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
 
 
+import imageio
 import numpy as np
 import os
-
-from p1_tests import test_p1_tarea4
-from p1_utils import visualizar_fusion
-from p1_tarea1 import reduce, expand
-from p1_tarea2 import gaus_piramide, lapl_piramide
-from p1_tarea3 import fusionar_lapl_pyr, reconstruir_lapl_pyr
+import matplotlib.pyplot as plt
 from p1_tarea4 import run_fusion
+from p1_utils import visualizar_lapl_piramide, visualizar_gaus_piramide
 
-def run_fusion_color(imgA, imgB, mask, niveles):
-    # Asegúrate de que las imágenes y la máscara son del mismo tamaño
+def cargar_imagenes(path_imagenes):
+    # Rutas de las imágenes
+    ruta_imgA = os.path.join(path_imagenes, "apple2.jpg")  
+    ruta_imgB = os.path.join(path_imagenes, "orange2.jpg")  
+    ruta_mask = os.path.join(path_imagenes, "mask_apple2_orange2.jpg")  
+
+    # Cargar imágenes
+    imgA = imageio.imread(ruta_imgA).astype(np.float64) / 255.0
+    imgB = imageio.imread(ruta_imgB).astype(np.float64) / 255.0
+    mask = imageio.imread(ruta_mask).astype(np.float64) / 255.0
+
+    # Asegurarse de que todas las imágenes tengan el mismo tamaño
     if imgA.shape != imgB.shape or imgA.shape != mask.shape:
         raise ValueError("Las imágenes y la máscara deben tener el mismo tamaño.")
 
-    # Inicializamos las variables de salida
-    Gpyr_imgA = []
-    Gpyr_imgB = []
-    Gpyr_mask = []
-    Lpyr_imgA = []
-    Lpyr_imgB = []
-    Lpyr_fus = []
-    Lpyr_fus_rec = []
+    return imgA, imgB, mask
 
-    # Convertir imágenes y máscara a tipo float y normalizarlas
-    imgA = imgA.astype(np.float64) / 255.0
-    imgB = imgB.astype(np.float64) / 255.0
-    mask = mask.astype(np.float64) / 255.0
+def run_fusion_color(imgA, imgB, mask, niveles):
+    # Descomponer en canales RGB
+    canales_A = [imgA[:, :, i] for i in range(3)]
+    canales_B = [imgB[:, :, i] for i in range(3)]
+    canal_mask = mask[:, :, 0]  
 
-    # Calcular las pirámides Gaussianas
-    Gpyr_imgA = gaus_piramide(imgA, niveles)
-    Gpyr_imgB = gaus_piramide(imgB, niveles)
-    Gpyr_mask = gaus_piramide(mask, niveles)
+    # Fusión de cada canal
+    canales_fusionados = []
+    for canalA, canalB in zip(canales_A, canales_B):
+        _, _, _, _, _, _, canal_fusionado = run_fusion(canalA, canalB, canal_mask, niveles)
+        canales_fusionados.append(canal_fusionado)
 
-    # Calcular las pirámides Laplacianas
-    Lpyr_imgA = lapl_piramide(Gpyr_imgA)
-    Lpyr_imgB = lapl_piramide(Gpyr_imgB)
+    # Juntar los canales fusionados para formar la imagen RGB
+    img_fusionada = np.stack(canales_fusionados, axis=-1)
 
-    # Fusionar las pirámides Laplacianas
-    Lpyr_fus = fusionar_lapl_pyr(Lpyr_imgA, Lpyr_imgB, Gpyr_mask)
-
-    # Reconstruir la imagen fusionada
-    Lpyr_fus_rec = reconstruir_lapl_pyr(Lpyr_fus)
-
-    # Recortar los valores fuera del rango [0, 1]
-    Lpyr_fus_rec = np.clip(Lpyr_fus_rec, 0, 1)
+    # Asegurarse de que los valores estén en el rango [0, 1]
+    img_fusionada = np.clip(img_fusionada, 0, 1)
 
     # Convertir de nuevo a rango [0, 255] para mostrar
-    Lpyr_fus_rec = (Lpyr_fus_rec * 255).astype(np.uint8)
+    img_fusionada = (img_fusionada * 255).astype(np.uint8)
 
-    return Gpyr_imgA, Gpyr_imgB, Gpyr_mask, Lpyr_imgA, Lpyr_imgB, Lpyr_fus, Lpyr_fus_rec
+    return img_fusionada
+
+def mostrar_imagen(imagen, titulo="Imagen"):
+    plt.imshow(imagen)
+    plt.title(titulo)
+    plt.axis('off')
+    plt.show()
 
 
-if __name__ == "__main__":    
-    
+if __name__ == "__main__":
     path_imagenes = "/home/e462135/TSV/p1/img/"
+    
+    # Cargar imágenes y máscara
+    imgA, imgB, mask = cargar_imagenes(path_imagenes)
+    
+    # Número de niveles en la pirámide
+    niveles = 5
 
-    print("Practica 1 - Tarea 4 - Test autoevaluación\n")    
-    result, imgAgray, imgBgray, maskgray, \
-        Gpyr_imgA, Gpyr_imgB, Gpyr_mask, Lpyr_imgA, Lpyr_imgB, Lpyr_fus, Lpyr_fus_rec \
-            = test_p1_tarea4(path_img=path_imagenes, precision=2)
-    print("Tests completado = " + str(result)) 
+    # Fusión de imágenes en color
+    img_fusionada = run_fusion_color(imgA, imgB, mask, niveles)
 
-    if result == True:
-        # Visualizar pirámides de la fusión
-        visualizar_fusion(imgAgray, imgBgray, maskgray, Gpyr_imgA, Gpyr_imgB, Gpyr_mask, Lpyr_imgA, Lpyr_imgB, Lpyr_fus, Lpyr_fus_rec)
-
-
-
-#path_imagenes = "/home/e462135/TSV/p1/img/"
+    # Mostrar la imagen fusionada
+    mostrar_imagen(img_fusionada, titulo="Imagen Fusionada")
