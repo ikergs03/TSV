@@ -1,10 +1,10 @@
 # Tratamiento de Señales Visuales/Tratamiento de Señales Multimedia I @ EPS-UAM
 # Practica 1: Fusion de imagenes mediante piramides
-# Memoria: codigo de la pregunta XX
+# Memoria: codigo de la pregunta 01
 
-# AUTOR1: APELLIDO1 APELLIDO1, NOMBRE1
-# AUTOR2: APELLIDO2 APELLIDO2, NOMBRE2
-# PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# PAREJA/TURNO: 01/VIERNES
 
 
 import imageio
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     imgA, imgB, mask = cargar_imagenes(path_imagenes)
     
     # Número de niveles en la pirámide
-    niveles = 5
+    niveles = 1
 
     # Fusión de imágenes en color
     img_fusionada = run_fusion_color(imgA, imgB, mask, niveles)
