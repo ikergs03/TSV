@@ -31,7 +31,7 @@ def experimentar_fusion(path_imagenes, niveles_explorados):
         visualizar_gaus_piramide(Gpyr_imgA)  
         visualizar_lapl_piramide(Lpyr_fus)  
 
-# Ejemplo de uso
+
 if __name__ == "__main__":
     path_imagenes = "/home/e462135/TSV/p1/img/"
     
