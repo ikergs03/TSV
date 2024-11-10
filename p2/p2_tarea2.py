@@ -89,8 +89,8 @@ def descripcion_puntos_interes(imagen, coords_esquinas, vtam = 8, nbins = 16, ti
 
     elif tipoDesc == "mag-ori":
         # Calcular las derivadas de la imagen
-        img_dx = nd.sobel(imagen, axis=0)
-        img_dy = nd.sobel(imagen, axis=1)
+        img_dx = nd.sobel(imagen, axis=0, mode='constant')
+        img_dy = nd.sobel(imagen, axis=1, mode='constant')
 
         # Calcular la orientación y magnitud
         img_ori = (np.rad2deg(np.arctan2(img_dx, img_dy)) + 360) % 360
@@ -102,8 +102,8 @@ def descripcion_puntos_interes(imagen, coords_esquinas, vtam = 8, nbins = 16, ti
         for tempx, tempy in new_coords_esquinas:
             # Definir la subimagen del vecindario
             x_start, y_start = tempx - radio, tempy - radio
-            vec_ori = img_ori[x_start:x_start + vtam + 1, y_start:y_start + vtam + 1]
-            vec_mag = img_mag[x_start:x_start + vtam + 1, y_start:y_start + vtam + 1]
+            vec_ori = img_ori[x_start: x_start + vtam + 1, y_start: y_start + vtam + 1]
+            vec_mag = img_mag[x_start: x_start + vtam + 1, y_start: y_start + vtam + 1]
 
             # Calcular el histograma ponderado por magnitud
             histograma = np.zeros(shape=nbins)
