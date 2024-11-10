@@ -32,7 +32,7 @@ def detectar_puntos_interes_harris(imagen, sigma=1.0, k=0.05, threshold_rel=0.2)
                            en el formato [fila, columna] de tipo int64.
     """
     # Normalización manual de la imagen en el rango [0,1]
-    imagen = imagen.astype(np.float64)
+    imagen = imagen.astype("float")
     imagen /= imagen.max()
 
     # Derivadas de la imagen usando filtros Sobel
