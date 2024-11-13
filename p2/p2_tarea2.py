@@ -106,11 +106,7 @@ def descripcion_puntos_interes(imagen, coords_esquinas, vtam = 8, nbins = 16, ti
             vec_mag = img_mag[x_start: x_start + vtam + 1, y_start: y_start + vtam + 1]
 
             # Calcular el histograma ponderado por magnitud
-            histograma = np.zeros(shape=nbins)
-            indices = np.digitize(vec_ori, bins) - 1
-
-            for mag, indx_bin in zip(vec_mag.flatten(), indices.flatten()):
-                histograma[indx_bin] += mag
+            histograma, _ = np.histogram(vec_ori, bins=bins, weights=vec_mag)
 
             descriptores.append(histograma)
 

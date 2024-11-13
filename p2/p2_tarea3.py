@@ -55,15 +55,29 @@ def correspondencias_puntos_interes(descriptores_imagen1, descriptores_imagen2, 
     """    
     correspondencias = np.empty(shape=[0,2]) # iniciamos la variable de salida (numpy array)        
    
-    #incluya su codigo aqui
-    #...
-
+    for i, descriptor1 in enumerate(descriptores_imagen1):
+        mejor_distancia = np.inf
+        mejor_j = -1
+        for j, descriptor2 in enumerate(descriptores_imagen2):
+            distancia = np.linalg.norm(descriptor1-descriptor2)
+            if tipoCorr == "mindist":
+                if distancia < mejor_distancia or (distancia == mejor_distancia and j < mejor_j):
+                    mejor_distancia = distancia
+                    mejor_j = j
+            elif tipoCorr=="nndr":
+                pass
+            else:
+                pass
+        if mejor_distancia < max_distancia:
+            correspondencias = np.vstack([correspondencias, [i,mejor_j]])
+                
+    
     return correspondencias
 
 if __name__ == "__main__":
     print("Practica 2 - Tarea 3 - Test autoevaluación\n")                
 
     ## tests correspondencias tipo 'minDist' (tarea 3a)
-    print("Tests completados = " + str(test_p2_tarea3(disptime=-1,stop_at_error=True,debug=True,tipoDesc='hist',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'hist' y ver errores
-    #print("Tests completados = " + str(test_p2_tarea3(disptime=-1,stop_at_error=False,debug=False,tipoDesc='hist',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'hist'
-    #print("Tests completados = " + str(test_p2_tarea3(disptime=1,stop_at_error=False,debug=False,tipoDesc='mag-ori',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'mag-ori'
+    #print("Tests completados = " + str(test_p2_tarea3(disptime=-1,stop_at_error=True,debug=True,tipoDesc='hist',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'hist' y ver errores
+    #print("Tests completados = " + str(test_p2_tarea3(disptime=-1,stop_at_error=False,debug=False,tipoDesc='hist',tipoCorr='mindist' ))) #analizar todas las imagenes con descriptor 'hist'
+    print("Tests completados = " + str(test_p2_tarea3(disptime=1,stop_at_error=False,debug=False,tipoDesc='mag-ori',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'mag-ori'
