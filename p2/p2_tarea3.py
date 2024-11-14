@@ -96,61 +96,11 @@ if __name__ == "__main__":
     #print("Tests with histogram descriptor:")
     #test_p2_tarea3(disptime=5, stop_at_error=False, debug=False, tipoDesc='hist', tipoCorr='mindist')
 
-    #Tests with histogram descriptor:
-    #Tests with histogram descriptor:
-    #Practica 2 - Tarea 3
-    #Realizando tests para la funcion 'correspondencias_puntos_interes' de la tarea 3
-    #La funcion es correcta si los resultados obtenidos tienen una tolerancia de 2 decimales con respecto a la salida correcta.
-
-    # * Utilizando datos en fichero '.\test_data\p2_tarea3_hist_mindist.data'
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #0 test_basica transformada #0... detectadas 2/2 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #0 test_basica transformada #1... detectadas 4/4 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #0 test_basica transformada #2... detectadas 4/4 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #1 Tablero_8x8_10 transformada #0... detectadas 17/17 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #1 Tablero_8x8_10 transformada #1... detectadas 27/27 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #1 Tablero_8x8_10 transformada #2... detectadas 9/9 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #2 Astronaut transformada #0... detectadas 14/14 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #2 Astronaut transformada #1... detectadas 17/17 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #2 Astronaut transformada #2... detectadas 13/13 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #3 Cofee transformada #0... detectadas 6/6 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #3 Cofee transformada #1... detectadas 19/19 correspondencias
-    #   Testeando correspondencias descriptores tipo HIST y distancia MINDIST para imagen #3 Cofee transformada #2... detectadas 7/7 correspondencias
-    #
-    # * Finalizado en 21.811 secs
-    # * RESULTADO FINAL: 139/139 CORRESPONDENCIAS CORRECTAS ( 100.00% )
-    #Tests completados = True
-
-    #Process finished with exit code 0
-
 
     # Test mag-ori
     #print("\nTests with magnitude-orientation descriptor:")
     #test_p2_tarea3(disptime=5, stop_at_error=False, debug=False, tipoDesc='mag-ori', tipoCorr='mindist')
-
-    #Tests with magnitude-orientation descriptor:
-    #Practica 2 - Tarea 3
-    #Realizando tests para la funcion 'correspondencias_puntos_interes' de la tarea 3
-    #La funcion es correcta si los resultados obtenidos tienen una tolerancia de 2 decimales con respecto a la salida correcta.
-
-    # * Utilizando datos en fichero '.\test_data\p2_tarea3_mag-ori_mindist.data'
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #0 test_basica transformada #0... detectadas 2/2 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #0 test_basica transformada #1... detectadas 4/4 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #0 test_basica transformada #2... detectadas 4/4 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #1 Tablero_8x8_10 transformada #0... detectadas 17/17 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #1 Tablero_8x8_10 transformada #1... detectadas 20/20 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #1 Tablero_8x8_10 transformada #2... detectadas 3/3 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #2 Astronaut transformada #0... detectadas 14/14 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #2 Astronaut transformada #1... detectadas 14/14 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #2 Astronaut transformada #2... detectadas 7/7 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #3 Cofee transformada #0... detectadas 6/6 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #3 Cofee transformada #1... detectadas 11/11 correspondencias
-    #    Testeando correspondencias descriptores tipo MAG-ORI y distancia MINDIST para imagen #3 Cofee transformada #2... detectadas 4/4 correspondencias
-
-    # * Finalizado en 22.142 secs
-    # * RESULTADO FINAL: 106/106 CORRESPONDENCIAS CORRECTAS ( 100.00% )
-    #Tests completados = True
-
-    #Process finished with exit code 0
+    
     
     
     #Tarea 2
