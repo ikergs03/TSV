@@ -14,6 +14,8 @@ from p2_tests import test_p2_tarea2
 # ...
 import matplotlib.pyplot as plt
 import scipy.ndimage as nd
+from skimage import io
+from p2_tarea1 import detectar_puntos_interes_harris
 
 def descripcion_puntos_interes(imagen, coords_esquinas, vtam = 8, nbins = 16, tipoDesc='hist'):
     """
@@ -118,13 +120,45 @@ if __name__ == "__main__":
     print("Practica 2 - Tarea 2 - Test autoevaluación\n")                
 
     ## tests descriptor tipo 'hist' (tarea 2a)
-    #print("Tests completados = " + str(test_p2_tarea2(disptime=-1,stop_at_error=False,debug=False,tipoDesc='hist'))) #analizar todas las imagenes y esquinas del test
+    print("Tests completados = " + str(test_p2_tarea2(disptime=-1,stop_at_error=False,debug=False,tipoDesc='hist'))) #analizar todas las imagenes y esquinas del test
     #print("Tests completados = " + str(test_p2_tarea2(disptime=1,stop_at_error=False,debug=False,tipoDesc='hist'))) #analizar todas las imagenes y esquinas del test, mostrar imagenes con resultados (1 segundo)
     #print("Tests completados = " + str(test_p2_tarea2(disptime=-1,stop_at_error=True,debug=True,tipoDesc='hist'))) #analizar todas las imagenes y esquinas del test, pararse en errores y mostrar datos
     #print("Tests completados = " + str(test_p2_tarea2(disptime=-1,stop_at_error=True,debug=True,tipoDesc='hist',imgIdx = 3, poiIdx = 7))) #analizar solamente imagen #2 y esquina #7    
 
     ## tests descriptor tipo 'mag-ori' (tarea 2b)
-    print("Tests completados = " + str(test_p2_tarea2(disptime=-1,stop_at_error=False,debug=False,tipoDesc='mag-ori'))) #analizar todas las imagenes y esquinas del test
+    #print("Tests completados = " + str(test_p2_tarea2(disptime=-1,stop_at_error=False,debug=False,tipoDesc='mag-ori'))) #analizar todas las imagenes y esquinas del test
     #print("Tests completados = " + str(test_p2_tarea2(disptime=0.1,stop_at_error=False,debug=False,tipoDesc='mag-ori'))) #analizar todas las imagenes y esquinas del test, mostrar imagenes con resultados (1 segundo)
     #print("Tests completados = " + str(test_p2_tarea2(disptime=-1,stop_at_error=True,debug=True,tipoDesc='mag-ori'))) #analizar todas las imagenes y esquinas del test, pararse en errores y mostrar datos
-    #print("Tests completados = " + str(test_p2_tarea2(disptime=1,stop_at_error=True,debug=True,tipoDesc='mag-ori',imgIdx = 3,poiIdx = 7))) #analizar solamente imagen #1 y esquina #7       
+    #print("Tests completados = " + str(test_p2_tarea2(disptime=1,stop_at_error=True,debug=True,tipoDesc='mag-ori',imgIdx = 3,poiIdx = 7))) #analizar solamente imagen #1 y esquina #7  
+    
+    
+    #Tarea 2
+    #ruta_imagen = "img/NotreDame2.jpg"
+    #imagen = io.imread(ruta_imagen, as_gray=True)
+
+    
+    # Detectar puntos de interés
+    #puntos_interes = detectar_puntos_interes_harris(imagen)
+
+    # Describir los puntos de interés usando la función dada
+    #descriptores, puntos_interes_filtrados = descripcion_puntos_interes(imagen, puntos_interes)
+    
+    # Número de histogramas a mostrar
+    #n = min(5, len(descriptores)) 
+
+    # Visualizar la imagen con los puntos de interés
+    #plt.imshow(imagen, cmap='gray')
+    #plt.scatter(puntos_interes_filtrados[:, 1], puntos_interes_filtrados[:, 0], c='red', s=10, label="Puntos de interés")
+    #plt.legend()
+    #plt.axis('off')
+    #plt.show()  
+    
+    # Visualizar los histogramas de los primeros n puntos de interés
+    #fig, axs = plt.subplots(1, n, figsize=(15, 3))
+    #for i in range(n):
+    #    axs[i].bar(range(len(descriptores[i])), descriptores[i])
+    #    axs[i].set_title(f"Histograma del punto {i+1}")
+    #    axs[i].set_xlabel("Bin")
+    #    axs[i].set_ylabel("Frecuencia")
+    #plt.tight_layout()
+    #plt.show()

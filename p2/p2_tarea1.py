@@ -15,6 +15,8 @@ from p2_tests import test_p2_tarea1
 from scipy.signal import convolve2d
 from scipy.ndimage import gaussian_filter
 from skimage.feature import corner_peaks
+import matplotlib.pyplot as plt
+from skimage import io
 
 
 def detectar_puntos_interes_harris(imagen, sigma=1.0, k=0.05, threshold_rel=0.2):
@@ -70,7 +72,23 @@ def detectar_puntos_interes_harris(imagen, sigma=1.0, k=0.05, threshold_rel=0.2)
 if __name__ == "__main__":    
     print("Practica 2 - Tarea 1 - Test autoevaluación\n")                
     
-    #print("Tests completados = " + str(test_p2_tarea1(disptime=-1,stop_at_error=False,debug=False))) #analizar todos los casos sin pararse en errores
+    print("Tests completados = " + str(test_p2_tarea1(disptime=-1,stop_at_error=False,debug=False))) #analizar todos los casos sin pararse en errores
     #print("Tests completados = " + str(test_p2_tarea1(disptime=1,stop_at_error=False,debug=False))) #analizar y visualizar todos los casos sin pararse en errores
     #print("Tests completados = " + str(test_p2_tarea1(disptime=-1,stop_at_error=True,debug=False))) #analizar todos los casos y pararse en errores
-    print("Tests completados = " + str(test_p2_tarea1(disptime=-1,stop_at_error=True,debug=True))) #analizar todos los casos, pararse en errores y mostrar informacion
+    #print("Tests completados = " + str(test_p2_tarea1(disptime=-1,stop_at_error=True,debug=True))) #analizar todos los casos, pararse en errores y mostrar informacion
+    
+    
+    #Tarea 2
+    # Cargar la imagen en escala de grises y convertirla en un array de NumPy
+    #ruta_imagen = "img/NotreDame2.jpg"
+    #imagen = io.imread(ruta_imagen, as_gray=True)
+
+    # Llamar a la función con la imagen cargada
+    #puntos_interes = detectar_puntos_interes_harris(imagen)
+
+    # Visualización de la imagen y los puntos de interés
+    #plt.imshow(imagen, cmap='gray')
+    #plt.scatter(puntos_interes[:, 1], puntos_interes[:, 0], c='red', s=10, label="Puntos de interés")
+    #plt.legend()
+    #plt.axis('off')  
+    #plt.show()

@@ -1,122 +1,108 @@
 # Tratamiento de Señales Visuales/Tratamiento de Señales Multimedia I @ EPS-UAM
 # Practica 2: Extraccion, descripcion y correspondencia de caracteristicas locales
-# Memoria: codigo de la pregunta XX
+# Memoria: codigo de la pregunta 04
 
-# AUTOR1: APELLIDO1 APELLIDO1, NOMBRE1
-# AUTOR2: APELLIDO2 APELLIDO2, NOMBRE2
-# PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# PAREJA/TURNO: 01/VIERNES
 
 import numpy as np
 import matplotlib.pyplot as plt
-from skimage import data
+from skimage import io
+from p2_tarea1 import detectar_puntos_interes_harris
+from p2_tarea2 import descripcion_puntos_interes
 
-def correspondencias_puntos_interes(descriptores_imagen1, descriptores_imagen2, tipoCorr='mindist', max_distancia=25, umbral_nndr=0.75):
+def correspondencias_puntos_interes(descriptores_imagen1, descriptores_imagen2, tipoCorr='mindist', max_distancia=25, nndr_threshold=0.75):
     """
-    Esta funcion determina las correspondencias entre dos conjuntos de descriptores mediante
-    el calculo de la similitud entre los descriptores.
+    Esta función determina las correspondencias entre dos conjuntos de descriptores mediante
+    el cálculo de la similitud entre los descriptores.
+
+    Se utiliza el criterio 'mindist' para mínima distancia euclídea y 'nndr' para el Nearest Neighbor Distance Ratio.
     
-    El parametro 'tipoCorr' determina el criterio de similitud aplicado 
-    para establecer correspondencias entre pares de descriptores:
-    - Criterio 'mindist': minima distancia euclidea entre descriptores 
-      menor que el umbral 'max_distancia'
-    - Criterio 'nndr': Nearest Neighbor Distance Ratio (NNDR), comparando la relación entre 
-      la distancia del descriptor más cercano y el segundo más cercano, usando un umbral umbral_nndr.
-    
-    Argumentos de entrada:
-    - descriptores1: numpy array con dimensiones [numero_descriptores, longitud_descriptor] 
-                     con los descriptores de los puntos de interes de la imagen 1.        
-    - descriptores2: numpy array con dimensiones [numero_descriptores, longitud_descriptor] 
-                     con los descriptores de los puntos de interes de la imagen 2.        
-    - tipoCorr: cadena de caracteres que indica el tipo de criterio para establecer correspondencias
-    - max_distancia: valor de tipo double o float utilizado por el criterio 'mindist' y 'nndr', 
-                     que determina si se aceptan correspondencias entre descriptores 
-                     con distancia minima menor que 'max_distancia' 
-    - umbral_nndr: valor de tipo float utilizado en el criterio NNDR, que determina si la relación
-                   entre las distancias más cercanas es aceptable.
-    
-    Argumentos de salida:
-    - correspondencias: numpy array con dimensiones [numero_correspondencias, 2] de tipo int64 
-                        que determina correspondencias entre descriptores de imagen 1 e imagen 2.
+    Argumentos:
+        - descriptores_imagen1: descriptores de los puntos de interés de la imagen 1.
+        - descriptores_imagen2: descriptores de los puntos de interés de la imagen 2.
+        - tipoCorr: tipo de criterio para establecer correspondencias ('mindist' o 'nndr').
+        - max_distancia: valor de umbral de distancia para 'mindist'.
+        - nndr_threshold: umbral de NNDR para filtrar correspondencias en el caso de 'nndr'.
+        
+    Retorna:
+        - correspondencias: correspondencias entre puntos de imagen 1 e imagen 2.
     """
-    correspondencias = np.empty(shape=[0, 2], dtype=np.int64)  # Inicializa la variable de salida con tipo int64
-    matched_descriptors = set()  # Para llevar un registro de los descriptores emparejados en imagen2
+    correspondencias = np.empty(shape=[0, 2], dtype=np.int64)  # Inicializar
+    matched_descriptors = set()  # Para evitar correspondencias repetidas
 
     for i, descriptor1 in enumerate(descriptores_imagen1):
-        mejor_distancia = np.inf
-        mejor_j = -1
-        distancias_minimas = []  # Para almacenar distancias de todos los descriptores
-
+        # Inicializar las mejores distancias y las posiciones de los descriptores más cercanos
+        distancias = []
         for j, descriptor2 in enumerate(descriptores_imagen2):
-            if j in matched_descriptors:
-                continue  # Salta los descriptores ya emparejados
-            distancia = np.linalg.norm(descriptor1 - descriptor2)
-            distancias_minimas.append((distancia, j))
+            distancia = np.linalg.norm(descriptor1 - descriptor2)  # Distancia euclídea
+            distancias.append((j, distancia))
 
-        distancias_minimas.sort(key=lambda x: x[0])  # Ordena por distancia ascendente
+        # Ordenar por distancia
+        distancias.sort(key=lambda x: x[1])
 
-        # Aplicar el criterio NNDR si es necesario
-        if tipoCorr == "nndr":
-            if len(distancias_minimas) >= 2:
-                distancia_1, j1 = distancias_minimas[0]
-                distancia_2, j2 = distancias_minimas[1]
-                ratio = distancia_1 / distancia_2
+        if tipoCorr == "mindist":
+            mejor_j, mejor_distancia = distancias[0]
+            if mejor_distancia < max_distancia and mejor_j not in matched_descriptors:
+                correspondencias = np.vstack([correspondencias, [i, mejor_j]])
+                matched_descriptors.add(mejor_j)
 
-                # Comprobar si el ratio es menor que el umbral
-                if ratio < umbral_nndr:
-                    if distancia_1 < max_distancia and j1 not in matched_descriptors:
-                        correspondencias = np.vstack([correspondencias, [i, j1]])
-                        matched_descriptors.add(j1)  # Marca este descriptor como emparejado
-        else:
-            # Aplicar el criterio 'mindist'
-            if distancias_minimas:
-                distancia_minima, mejor_j = distancias_minimas[0]
-                if distancia_minima < max_distancia and mejor_j not in matched_descriptors:
-                    correspondencias = np.vstack([correspondencias, [i, mejor_j]])
-                    matched_descriptors.add(mejor_j)  # Marca este descriptor como emparejado
+        elif tipoCorr == "nndr":
+            # Comprobar el ratio NNDR: distancia del vecino más cercano / distancia del segundo vecino más cercano
+            mejor_j, mejor_distancia = distancias[0]
+            segundo_j, segundo_mejor_distancia = distancias[1]
+            nndr_ratio = mejor_distancia / segundo_mejor_distancia
+
+            if nndr_ratio < nndr_threshold and mejor_j not in matched_descriptors:
+                correspondencias = np.vstack([correspondencias, [i, mejor_j]])
+                matched_descriptors.add(mejor_j)
 
     return correspondencias
 
 
-# Función para visualizar las correspondencias
-def mostrar_correspondencias(imagen1, imagen2, correspondencias, coords_imagen1, coords_imagen2):
-    """
-    Muestra las correspondencias entre los puntos de interés de dos imágenes usando matplotlib.
-    """
-    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
-
-    ax[0].imshow(imagen1, cmap='gray')
-    ax[0].scatter(coords_imagen1[:, 1], coords_imagen1[:, 0], c='r', label='Puntos Imagen 1')
-    ax[0].set_title("Imagen 1")
-
-    ax[1].imshow(imagen2, cmap='gray')
-    ax[1].scatter(coords_imagen2[:, 1], coords_imagen2[:, 0], c='g', label='Puntos Imagen 2')
-    ax[1].set_title("Imagen 2")
-
-    for corr in correspondencias:
-        y1, x1 = coords_imagen1[corr[0]]
-        y2, x2 = coords_imagen2[corr[1]]
-        ax[0].plot([x1, x2], [y1, y2], 'b-')
-        ax[1].plot([x1, x2], [y1, y2], 'b-')
-
-    plt.show()
-
-
 # Bloque principal
 if __name__ == "__main__":
-    # Cargar las imágenes de ejemplo
-    imagen1 = data.camera()  # Imagen 1
-    imagen2 = data.camera()  # Imagen 2 (puedes usar otra imagen diferente para la comparación)
-    
-    # Coordenadas de ejemplo de los puntos de interés (estas deben ser obtenidas con un detector de puntos de interés real)
-    coords_imagen1 = np.array([[50, 50], [100, 100], [150, 150]])  # Ejemplo de coordenadas de puntos de interés
-    coords_imagen2 = np.array([[55, 55], [95, 95], [145, 145]])  # Ejemplo de coordenadas de puntos de interés
+    # Visualizar las correspondencias
+    imagen1 = io.imread("img/NotreDame1.jpg", as_gray=True)
+    imagen2 = io.imread("img/NotreDame2.jpg", as_gray=True)  # Cambiar por el nombre de tu imagen 2
 
-    # Descriptores de ejemplo (estos deben ser calculados utilizando algún algoritmo como SIFT, ORB, etc.)
-    descriptores_imagen1 = np.random.rand(len(coords_imagen1), 128)  # Simulación de descriptores
-    descriptores_imagen2 = np.random.rand(len(coords_imagen2), 128)  # Simulación de descriptores
+    # Detectar los puntos de interés y describirlos
+    coords_imagen1 = detectar_puntos_interes_harris(imagen1)
+    coords_imagen2 = detectar_puntos_interes_harris(imagen2)
+    descriptores_imagen1, coords_filtrados_imagen1 = descripcion_puntos_interes(imagen1, coords_imagen1, tipoDesc="hist")
+    descriptores_imagen2, coords_filtrados_imagen2 = descripcion_puntos_interes(imagen2, coords_imagen2, tipoDesc="hist")
 
-    # Calcular las correspondencias utilizando NNDR
-    correspondencias = correspondencias_puntos_interes(descriptores_imagen1, descriptores_imagen2, tipoCorr="nndr", max_distancia=25, umbral_nndr=0.75)
+    # Encontrar las correspondencias usando NNDR
+    correspondencias = correspondencias_puntos_interes(descriptores_imagen1, descriptores_imagen2, tipoCorr="nndr", nndr_threshold=0.75)
 
-    # Mostrar las correspondencias
-    mostrar_correspondencias(imagen1, imagen2, correspondencias, coords_imagen1, coords_imagen2)
+    # Crear una imagen combinada
+    altura = max(imagen1.shape[0], imagen2.shape[0])
+    ancho_total = imagen1.shape[1] + imagen2.shape[1]
+    imagen_combinada = np.zeros((altura, ancho_total))
+
+    # Colocar las imágenes
+    imagen_combinada[:imagen1.shape[0], :imagen1.shape[1]] = imagen1
+    imagen_combinada[:imagen2.shape[0], imagen1.shape[1]:] = imagen2
+
+    # Mostrar la imagen combinada con las correspondencias
+    plt.figure(figsize=(15, 8))
+    plt.imshow(imagen_combinada, cmap='gray')
+    plt.axis('off')
+
+    # Desplazamiento en el eje x para la segunda imagen
+    desplazamiento_x = imagen1.shape[1]
+
+    # Dibujar los puntos de interés
+    plt.scatter(coords_filtrados_imagen1[:, 1], coords_filtrados_imagen1[:, 0], c='red', s=10, label="Imagen 1")
+    plt.scatter(coords_filtrados_imagen2[:, 1] + desplazamiento_x, coords_filtrados_imagen2[:, 0], c='blue', s=10, label="Imagen 2")
+
+    # Conectar puntos correspondientes
+    for (i, j) in correspondencias:
+        coord_imagen1 = coords_filtrados_imagen1[i]
+        coord_imagen2 = coords_filtrados_imagen2[j]
+        plt.plot([coord_imagen1[1], coord_imagen2[1] + desplazamiento_x], [coord_imagen1[0], coord_imagen2[0]], color="yellow", linewidth=0.5)
+
+    plt.legend()
+    plt.tight_layout()
+    plt.show()

@@ -1,10 +1,10 @@
 # Tratamiento de Señales Visuales/Tratamiento de Señales Multimedia I @ EPS-UAM
 # Practica 2: Extraccion, descripcion y correspondencia de caracteristicas locales
-# Memoria: codigo de la pregunta XX
+# Memoria: codigo de la pregunta 01
 
-# AUTOR1: APELLIDO1 APELLIDO1, NOMBRE1
-# AUTOR2: APELLIDO2 APELLIDO2, NOMBRE2
-# PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# PAREJA/TURNO: 01/VIERNES
 
 import numpy as np
 import matplotlib.pyplot as plt

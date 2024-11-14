@@ -2,9 +2,9 @@
 # Practica 2: Extraccion, descripcion y correspondencia de caracteristicas locales
 # Tarea 3:  Similitud y correspondencia de puntos de interes
 
-# AUTOR1: APELLIDO1 APELLIDO1, NOMBRE1
-# AUTOR2: APELLIDO2 APELLIDO2, NOMBRE2
-# PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# PAREJA/TURNO: 01/VIERNES
 
 # librerias y paquetes por defecto
 import numpy as np
@@ -12,6 +12,10 @@ from p2_tests import test_p2_tarea3
 
 # Incluya aqui las librerias que necesite en su codigo
 # ...
+import matplotlib.pyplot as plt
+from skimage import io
+from p2_tarea1 import detectar_puntos_interes_harris
+from p2_tarea2 import descripcion_puntos_interes
 
 def correspondencias_puntos_interes(descriptores_imagen1, descriptores_imagen2, tipoCorr='mindist',max_distancia=25):
     """
@@ -81,6 +85,66 @@ if __name__ == "__main__":
     print("Practica 2 - Tarea 3 - Test autoevaluación\n")                
 
     ## tests correspondencias tipo 'minDist' (tarea 3a)
-    #print("Tests completados = " + str(test_p2_tarea3(disptime=-1,stop_at_error=True,debug=True,tipoDesc='hist',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'hist' y ver errores
+    print("Tests completados = " + str(test_p2_tarea3(disptime=-1,stop_at_error=True,debug=True,tipoDesc='hist',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'hist' y ver errores
     #print("Tests completados = " + str(test_p2_tarea3(disptime=-1,stop_at_error=False,debug=False,tipoDesc='hist',tipoCorr='mindist' ))) #analizar todas las imagenes con descriptor 'hist'
-    print("Tests completados = " + str(test_p2_tarea3(disptime=1,stop_at_error=False,debug=False,tipoDesc='mag-ori',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'mag-ori'
+    #print("Tests completados = " + str(test_p2_tarea3(disptime=1,stop_at_error=False,debug=False,tipoDesc='mag-ori',tipoCorr='mindist'))) #analizar todas las imagenes con descriptor 'mag-ori'
+    
+    
+    #Tarea 3
+    # Test hist 
+    #print("Tests with histogram descriptor:")
+    #test_p2_tarea3(disptime=5, stop_at_error=False, debug=False, tipoDesc='hist', tipoCorr='mindist')
+
+    # Test mag-ori
+    #print("\nTests with magnitude-orientation descriptor:")
+    #test_p2_tarea3(disptime=5, stop_at_error=False, debug=False, tipoDesc='mag-ori', tipoCorr='mindist')
+    
+    
+    
+    #Tarea 2
+    # Cargar las imágenes en escala de grises
+    #imagen1 = io.imread("img/NotreDame1.jpg", as_gray=True)
+    #imagen2 = io.imread("img/NotreDame2.jpg", as_gray=True)  # Cambia "otra_imagen.jpg" por el nombre de tu segunda imagen
+
+    
+    # Detectar y describir puntos de interés en ambas imágenes
+    #coords_imagen1 = detectar_puntos_interes_harris(imagen1)
+    #coords_imagen2 = detectar_puntos_interes_harris(imagen2)
+    #descriptores_imagen1, coords_filtrados_imagen1 = descripcion_puntos_interes(imagen1, coords_imagen1, tipoDesc="hist")
+    #descriptores_imagen2, coords_filtrados_imagen2 = descripcion_puntos_interes(imagen2, coords_imagen2, tipoDesc="hist")
+
+    # Encontrar correspondencias entre los descriptores de las dos imágenes
+    #correspondencias = correspondencias_puntos_interes(descriptores_imagen1, descriptores_imagen2)
+
+    # Crear una imagen combinada
+    #altura = max(imagen1.shape[0], imagen2.shape[0])
+    #ancho_total = imagen1.shape[1] + imagen2.shape[1]
+    #imagen_combinada = np.zeros((altura, ancho_total))
+
+    # Colocar las dos imágenes en la imagen combinada
+    #imagen_combinada[:imagen1.shape[0], :imagen1.shape[1]] = imagen1
+    #imagen_combinada[:imagen2.shape[0], imagen1.shape[1]:] = imagen2
+
+    # Visualizar la imagen combinada con las correspondencias
+    #plt.figure(figsize=(15, 8))
+    #plt.imshow(imagen_combinada, cmap='gray')
+    #plt.axis('off')
+
+    # Desplazamiento en el eje x para la segunda imagen
+    #desplazamiento_x = imagen1.shape[1]
+
+    # Dibujar los puntos de interés en ambas imágenes
+    #plt.scatter(coords_filtrados_imagen1[:, 1], coords_filtrados_imagen1[:, 0], c='red', s=10, label="Puntos de interés Imagen 1")
+    #plt.scatter(coords_filtrados_imagen2[:, 1] + desplazamiento_x, coords_filtrados_imagen2[:, 0], c='blue', s=10, label="Puntos de interés Imagen 2")
+
+    # Conectar puntos correspondientes
+    #for (i, j) in correspondencias:
+    #    coord_imagen1 = coords_filtrados_imagen1[i]
+    #    coord_imagen2 = coords_filtrados_imagen2[j]
+
+    #    # Dibujar línea entre puntos correspondientes
+    #    plt.plot([coord_imagen1[1], coord_imagen2[1] + desplazamiento_x], [coord_imagen1[0], coord_imagen2[0]], color="yellow", linewidth=0.5)
+
+    #plt.legend()
+    #plt.tight_layout()
+    #plt.show()
