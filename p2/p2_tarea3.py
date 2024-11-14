@@ -52,26 +52,29 @@ def correspondencias_puntos_interes(descriptores_imagen1, descriptores_imagen2, 
     #    con algún descriptor de la imagen 1, seleccione el descriptor de la imagen 2 con 
     #    indice/posicion menor. Por ejemplo, si las correspondencias [5,22] y [5,23] tienen la misma
     #    distancia minima, seleccione [5,22] al ser el indice 22 menor que 23
-    """    
-    correspondencias = np.empty(shape=[0,2]) # iniciamos la variable de salida (numpy array)        
-   
+    """
+    correspondencias = np.empty(shape=[0, 2], dtype=np.int64)  # initialize the output variable with dtype int64
+    matched_descriptors = set()  # to keep track of matched descriptors in imagen2
+
     for i, descriptor1 in enumerate(descriptores_imagen1):
         mejor_distancia = np.inf
         mejor_j = -1
         for j, descriptor2 in enumerate(descriptores_imagen2):
-            distancia = np.linalg.norm(descriptor1-descriptor2)
+            if j in matched_descriptors:
+                continue  # skip already matched descriptors
+            distancia = np.linalg.norm(descriptor1 - descriptor2)
             if tipoCorr == "mindist":
                 if distancia < mejor_distancia or (distancia == mejor_distancia and j < mejor_j):
                     mejor_distancia = distancia
                     mejor_j = j
-            elif tipoCorr=="nndr":
+            elif tipoCorr == "nndr":
                 pass
             else:
                 pass
-        if mejor_distancia < max_distancia:
-            correspondencias = np.vstack([correspondencias, [i,mejor_j]])
-                
-    
+        if mejor_distancia < max_distancia and mejor_j != -1:
+            correspondencias = np.vstack([correspondencias, [i, mejor_j]])
+            matched_descriptors.add(mejor_j)  # mark this descriptor as matched
+
     return correspondencias
 
 if __name__ == "__main__":
