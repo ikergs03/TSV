@@ -9,61 +9,86 @@
 # librerias y paquetes por defecto
 from p3_tests import test_p3_tarea1
 import numpy as np
+from scipy.spatial.distance import cdist
+from sklearn.cluster import KMeans
+
 
 def construir_vocabulario(list_img_desc, vocab_size=5, max_iter=300):
-    """   
+    """
     # Esta funcion utiliza K-Means para agrupar los descriptores en "vocab_size" clusters.
     #
     # Argumentos de entrada:
-    # - list_array_desc: Lista 1xN con los descriptores de cada imagen. Cada posicion de la lista 
-    #                   contiene (MxD) numpy arrays que representan UNO O VARIOS DESCRIPTORES 
+    # - list_array_desc: Lista 1xN con los descriptores de cada imagen. Cada posicion de la lista
+    #                   contiene (MxD) numpy arrays que representan UNO O VARIOS DESCRIPTORES
     #                   extraidos sobre la imagen
-    #                   - M es el numero de vectores de caracteristicas/features de cada imagen 
-    #                   - D el numero de dimensiones del vector de caracteristicas/feature.    
-    #   - vocab_size: int, numero de palabras para el vocabulario a construir.    
+    #                   - M es el numero de vectores de caracteristicas/features de cada imagen
+    #                   - D el numero de dimensiones del vector de caracteristicas/feature.
+    #   - vocab_size: int, numero de palabras para el vocabulario a construir.
     #   - max_iter: int, numero maximo de iteraciones del algoritmo KMeans
     #
     # Argumentos de salida:
-    #   - vocabulario: Numpy array de tamaño [vocab_size, D], 
+    #   - vocabulario: Numpy array de tamaño [vocab_size, D],
     #                   que contiene los centros de los clusters obtenidos por K-Means
     #
     #
     # NOTA: se sugiere utilizar la funcion sklearn.cluster.KMeans
-    # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html     
+    # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
     """
-    vocabulario = np.empty(shape=[vocab_size,list_img_desc[0].shape[1]]) # iniciamos la variable de salida (numpy array)
+    # Concatenar todos los descriptores en un único array
+    all_descriptors = np.concatenate(list_img_desc,
+                                     axis=0)  # MxD, donde M es la suma de descriptores de todas las imágenes
 
-    #... 
+    # Aplicar K-Means para encontrar los centros (vocabulario)
+    kmeans = KMeans(n_clusters=vocab_size, max_iter=max_iter, random_state=0)
+    kmeans.fit(all_descriptors)
+
+    # Extraer los centros de los clusters como vocabulario
+    vocabulario = kmeans.cluster_centers_
 
     return vocabulario
+
 
 def obtener_bags_of_words(list_img_desc, vocab):
     """
     # Esta funcion obtiene el Histograma Bag of Words para cada imagen
     #
     # Argumentos de entrada:
-    # - list_img_desc: Lista 1xN con los descriptores de cada imagen. Cada posicion de la lista 
-    #                   contiene (MxD) numpy arrays que representan UNO O VARIOS DESCRIPTORES 
+    # - list_img_desc: Lista 1xN con los descriptores de cada imagen. Cada posicion de la lista
+    #                   contiene (MxD) numpy arrays que representan UNO O VARIOS DESCRIPTORES
     #                   extraidos sobre la imagen
-    #                   - M es el numero de vectores de caracteristicas/features de cada imagen 
-    #                   - D el numero de dimensiones del vector de caracteristicas/feature.  
-    #   - vocab: Numpy array de tamaño [vocab_size, D], 
-    #                  que contiene los centros de los clusters obtenidos por K-Means.   
+    #                   - M es el numero de vectores de caracteristicas/features de cada imagen
+    #                   - D el numero de dimensiones del vector de caracteristicas/feature.
+    #   - vocab: Numpy array de tamaño [vocab_size, D],
+    #                  que contiene los centros de los clusters obtenidos por K-Means.
     #
-    # Argumentos de salida: 
-    #   - list_img_bow: Array de Numpy [N x vocab_size], donde cada posicion contiene 
+    # Argumentos de salida:
+    #   - list_img_bow: Array de Numpy [N x vocab_size], donde cada posicion contiene
     #                   el histograma bag-of-words construido para cada imagen.
     #
     """
-    # iniciamos la variable de salida (numpy array)
-    list_img_bow = np.empty(shape=[len(list_img_desc),len(vocab)]) 
-    
-    #...
-    
+    # Inicializar el array de salida para los histogramas BOW
+    list_img_bow = np.zeros((len(list_img_desc), vocab.shape[0]))  # [N x vocab_size]
+
+    # Para cada conjunto de descriptores de imagen
+    for i, img_desc in enumerate(list_img_desc):
+        # Calcular distancias entre descriptores de la imagen y vocabulario
+        distancias = cdist(img_desc, vocab, metric='euclidean')  # MxD vs vocab_sizexD → Mxvocab_size
+
+        # Encontrar el índice del cluster más cercano para cada descriptor
+        clusters_cercanos = np.argmin(distancias, axis=1)
+
+        # Construir el histograma de frecuencias
+        histograma, _ = np.histogram(clusters_cercanos, bins=np.arange(vocab.shape[0] + 1))
+
+        # Normalizar el histograma para obtener un vector de características uniforme
+        list_img_bow[i, :] = histograma / np.sum(histograma)
+
     return list_img_bow
 
-if __name__ == "__main__":    
-    dataset_path = './datasets/scenes15/'
-    print("Practica 3 - Tarea 1 - Test autoevaluación\n")                    
-    print("Tests completados = " + str(test_p3_tarea1(dataset_path,stop_at_error=False,debug=False))) #analizar todos los casos sin pararse en errores ni mostrar datos
-    #print("Tests completados = " + str(test_p3_tarea1(dataset_path,stop_at_error=True,debug=True))) #analizar todos los casos, pararse en errores y mostrar datos
+
+if __name__ == "__main__":
+    dataset_path = 'C:\\Users\\2alex\\PycharmProjects\\TSV\\p3\\dataset_scenes15'
+    print("Practica 3 - Tarea 1 - Test autoevaluación\n")
+    print("Tests completados = " + str(test_p3_tarea1(dataset_path, stop_at_error=False,
+                                                      debug=False)))  # analizar todos los casos sin pararse en errores ni mostrar datos
+    # print("Tests completados = " + str(test_p3_tarea1(dataset_path,stop_at_error=True,debug=True))) #analizar todos los casos, pararse en errores y mostrar datos
