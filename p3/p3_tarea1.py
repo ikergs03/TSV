@@ -87,7 +87,7 @@ def obtener_bags_of_words(list_img_desc, vocab):
 
 
 if __name__ == "__main__":
-    dataset_path =
+    dataset_path = 'C:\\Users\\2alex\\PycharmProjects\\TSV\\p3\\dataset_scenes15'
     print("Practica 3 - Tarea 1 - Test autoevaluación\n")
     print("Tests completados = " + str(test_p3_tarea1(dataset_path, stop_at_error=False, debug=False)))  #analizar todos los casos sin pararse en errores ni mostrar datos
-    #print("Tests completados = " + str(test_p3_tarea1(dataset_path,stop_at_error=True,debug=True))) #analizar todos los casos, pararse en errores y mostrar datos
+    print("Tests completados = " + str(test_p3_tarea1(dataset_path,stop_at_error=True,debug=True))) #analizar todos los casos, pararse en errores y mostrar datos
