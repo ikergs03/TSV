@@ -50,7 +50,7 @@ def obtener_features_hog(path_imagenes, tamano=100, orientaciones=9, pixeles_por
         features_hog_flat = features_hog.reshape(
             (n_bloques_y * n_bloques_x, celdas_bloque_y * celdas_bloque_x * orientaciones))
 
-        # Validar dimensiones y agregar a la lista
+        # Agregar a la lista
         list_img_desc_hog.append(features_hog_flat)
     return list_img_desc_hog
 
