@@ -81,6 +81,9 @@ def main():
         X_train_bow = obtener_bags_of_words(X_train_hog, vocabulario)
         X_test_bow = obtener_bags_of_words(X_test_hog, vocabulario)
         
+        # Crear y entrenar el clasificador SVM lineal
+        print("Creando y entrenando el clasificador SVM lineal...")
+        svm_clf = make_pipeline(StandardScaler(), SVC(kernel='linear', max_iter=MAX_ITER))
         svm_clf.fit(X_train_bow, y_train)
         y_train_pred = svm_clf.predict(X_train_bow)
         y_test_pred = svm_clf.predict(X_test_bow)
@@ -90,7 +93,9 @@ def main():
 
     plt.plot(vocab_sizes, train_accuracies, label='Train Accuracy')
     plt.plot(vocab_sizes, test_accuracies, label='Test Accuracy')
+    plt.title('Kernel: Linear') 
     plt.xlabel('Vocabulary Size')
+    plt.xticks(vocab_sizes)
     plt.ylabel('Accuracy')
     plt.legend()
     plt.show()
@@ -99,19 +104,40 @@ def main():
     print("3.2.2: Investigando y comparando distintos tipos de kernels no lineales...")
     kernels = ['rbf', 'poly']
     for kernel in kernels:
-        print(f"Procesando kernel: {kernel}")
-        svm_clf = make_pipeline(StandardScaler(), SVC(kernel=kernel, max_iter=MAX_ITER))
-        svm_clf.fit(X_train_bow, y_train)
+        train_accuracies = []
+        test_accuracies = []
+        for size in vocab_sizes:
+            print(f"Procesando vocabulario de tamaño: {size}")
+            vocabulario = construir_vocabulario(X_train_hog, size)
+            X_train_bow = obtener_bags_of_words(X_train_hog, vocabulario)
+            X_test_bow = obtener_bags_of_words(X_test_hog, vocabulario)
+            
+            print(f"Procesando kernel: {kernel}")
+            svm_clf = make_pipeline(StandardScaler(), SVC(kernel=kernel, max_iter=MAX_ITER))
+            svm_clf.fit(X_train_bow, y_train)
+            
+            y_train_pred = svm_clf.predict(X_train_bow)
+            y_test_pred = svm_clf.predict(X_test_bow)
+            
+            train_accuracy = accuracy_score(y_train, y_train_pred)
+            test_accuracy = accuracy_score(y_test, y_test_pred)
+            
+            train_accuracies.append(accuracy_score(y_train, y_train_pred))
+            test_accuracies.append(accuracy_score(y_test, y_test_pred))
+            
+            #print(f'Kernel: {kernel}')
+            #print(f'Train Accuracy: {train_accuracy}')
+            #print(f'Test Accuracy: {test_accuracy}')
+            
+        plt.plot(vocab_sizes, train_accuracies, label=f'Train Accuracy ({kernel})')
+        plt.plot(vocab_sizes, test_accuracies, label=f'Test Accuracy ({kernel})')
+        plt.title(f'Kernel: {kernel}')
+        plt.xlabel('Vocabulary Size')
+        plt.xticks(vocab_sizes)
+        plt.ylabel('Accuracy')
+        plt.legend()
+        plt.show()
         
-        y_train_pred = svm_clf.predict(X_train_bow)
-        y_test_pred = svm_clf.predict(X_test_bow)
-        
-        train_accuracy = accuracy_score(y_train, y_train_pred)
-        test_accuracy = accuracy_score(y_test, y_test_pred)
-        
-        print(f'Kernel: {kernel}')
-        print(f'Train Accuracy: {train_accuracy}')
-        print(f'Test Accuracy: {test_accuracy}')
 
 if __name__ == "__main__":
     main()
