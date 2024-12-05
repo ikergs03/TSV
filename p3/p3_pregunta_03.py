@@ -31,7 +31,7 @@ def cargar_datos(dataset_path, max_per_category, train_test_ratio):
                                                         stratify=data.target)
     return X_train, X_test, y_train, y_test, data.target_names
 
-def evaluar_random_forest(bow_train, bow_test, y_train, y_test, n_estimators=100):
+def evaluar_random_forest(bow_train, bow_test, y_train, y_test, n_estimators=100, max_depth=None):
     # Preprocess data with StandardScaler
     scaler = StandardScaler()
     bow_train_scaled = scaler.fit_transform(bow_train)
@@ -40,7 +40,7 @@ def evaluar_random_forest(bow_train, bow_test, y_train, y_test, n_estimators=100
     # Create and train Random Forest Classifier
     rf = RandomForestClassifier(n_estimators=n_estimators, 
                                 random_state=42, 
-                                max_iter=10)
+                                max_depth=max_depth)
     rf.fit(bow_train_scaled, y_train)
     
     # Calculate accuracies
@@ -63,7 +63,7 @@ def experimento_numero_estimadores():
     bow_test_hog = obtener_bags_of_words(features_test_hog, vocab_hog)
 
     # Experimentar con diferentes números de estimadores
-    n_estimators_list = [10, 50, 100, 200, 500]
+    n_estimators_list = [10, 50, 100, 200, 500, 750, 1000, 1500, 2000]
     results_train = []
     results_test = []
 
@@ -80,24 +80,23 @@ def experimento_numero_estimadores():
     plt.plot(n_estimators_list, results_train, label='Train Accuracy', marker='o')
     plt.plot(n_estimators_list, results_test, label='Test Accuracy', marker='o')
     plt.xlabel("Número de Estimadores")
+    plt.xticks(n_estimators_list)
     plt.ylabel("Precisión (%)")
     plt.title("Impacto del Número de Estimadores en Random Forest")
     plt.legend()
     plt.grid(True)
-    plt.xscale('log')
-    plt.savefig('random_forest_estimators.png')
-    plt.close()
+    plt.show()
 
     # Encontrar el mejor número de estimadores
     mejor_indice = results_test.index(max(results_test))
-    mejor_n_estimators = n_estimators_list[mejor_indice]
+    mejor_n_estimadores = n_estimators_list[mejor_indice]
     
     print(f"\nMejor configuración:")
-    print(f"Número de estimadores: {mejor_n_estimators}")
+    print(f"Número de estimadores: {mejor_n_estimadores}")
     print(f"Precisión de entrenamiento: {results_train[mejor_indice]:.2f}%")
     print(f"Precisión de test: {results_test[mejor_indice]:.2f}%")
 
-    return mejor_n_estimators
+    return mejor_n_estimadores
 
 if __name__ == "__main__":
     experimento_numero_estimadores()
