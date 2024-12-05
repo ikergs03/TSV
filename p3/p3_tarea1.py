@@ -2,9 +2,9 @@
 # Practica 3: Reconocimiento de escenas con modelos BOW/BOF
 # Tarea 1: modelo BOW/BOF
 
-# AUTOR1: APELLIDO1 APELLIDO1, NOMBRE1
-# AUTOR2: APELLIDO2 APELLIDO2, NOMBRE2
-# PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# PAREJA/TURNO: 01/VIERNES
 
 # librerias y paquetes por defecto
 from p3_tests import test_p3_tarea1
