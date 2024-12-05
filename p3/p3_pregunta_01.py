@@ -1,3 +1,11 @@
+# Tratamiento de Señales Visuales/Tratamiento de Señales Multimedia I @ EPS-UAM
+# Practica 3: Reconocimiento de escenas con modelos BOW
+# Memoria - Pregunta XX
+
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# PAREJA/TURNO: 01/VIERNES
+
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from p3_tarea1 import construir_vocabulario, obtener_bags_of_words

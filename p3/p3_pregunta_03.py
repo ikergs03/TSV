@@ -2,9 +2,9 @@
 # Practica 3: Reconocimiento de escenas con modelos BOW
 # Memoria - Pregunta 3.3
 
-# AUTOR1: APELLIDO1 APELLIDO1, NOMBRE1
-# AUTOR2: APELLIDO2 APELLIDO2, NOMBRE2
-# PAREJA/TURNO: NUMERO_PAREJA/NUMERO_TURNO
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# PAREJA/TURNO: 01/VIERNES
 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier

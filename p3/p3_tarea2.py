@@ -1,3 +1,11 @@
+# Tratamiento de Señales Visuales/Tratamiento de Señales Multimedia I @ EPS-UAM
+# Practica 3: Reconocimiento de escenas con modelos BOW/BOF
+# Tarea 2: extraccion de caracteristicas
+
+# AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
+# AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
+# PAREJA/TURNO: 01/VIERNES
+
 from p3_tests import test_p3_tarea2
 
 import numpy as np
