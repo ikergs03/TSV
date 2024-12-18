@@ -1,6 +1,6 @@
 # Tratamiento de Señales Visuales/Tratamiento de Señales Multimedia I @ EPS-UAM
 # Practica 3: Reconocimiento de escenas con modelos BOW
-# Memoria - Pregunta XX
+# Memoria - Pregunta 3.1
 
 # AUTOR2: LÓPEZ MARTÍNEZ, ALEJANDRO
 # AUTOR1: GONZÁLEZ SÁNCHEZ, IKER
